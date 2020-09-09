@@ -15,7 +15,7 @@ async def on_ready():
 
 @client.command( pass_context = True )
 
-async def clear( ctx, amount = 100 ):
+async def clear( ctx, amount = 1 ):
     await ctx.channel.purge( limit = amount + 1 )
 
 @client.command( pass_context = True )
@@ -70,6 +70,7 @@ async def help( ctx ):
     emb.add_field( name='{}kick'.format(PREFIX), value='Кик с сервера\n')
     emb.add_field( name='{}ban'.format(PREFIX), value='Бан\n')
     emb.add_field( name='{}pardon'.format(PREFIX), value='Разбан')
+    emb.add_field(name='{}mute'.format(PREFIX), value='Замютить')
 
     await ctx.send( embed = emb )
 
@@ -85,6 +86,9 @@ async def mute( ctx, member: discord.Member ):
     await member.add_roles( mute_role )
     await ctx.send( embed = emb )
 
+@client.event
+async def on_command_error( ctx, error ):
+    pass
 
 token = open( 'token', 'r' ).readline()
 client.run( token )
