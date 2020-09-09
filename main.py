@@ -62,4 +62,5 @@ async def help( ctx ):
     await ctx.send( embed = emb )
 
 
-client.run( 'NzUxNzcwMjkyODQ5NzM3ODAx.X1N6pQ.EJHAofQMPT85enY3eBFKVjjgyJg' )
+token = open( 'token', 'r' ).readline()
+client.run( token )
