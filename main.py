@@ -22,23 +22,34 @@ async def clear( ctx, amount = 100 ):
 @commands.has_permissions( administrator = True )
 
 async def kick( ctx, member: discord.Member, *, reason = None ):
+    emb = discord.Embed(title='Готово!', colour=discord.Color.gold())
+
+    emb.add_field(name='{} успешно кикнут!'.format(member.display_name), value='Справедливо...')
+
     await ctx.channel.purge( limit = 1 )
     await member.kick( reason = reason )
-    await ctx.send( f'{member.mention} успешно кикнут!' )
+    await ctx.send( embed = emb )
 
 @client.command( pass_context = True )
 @commands.has_permissions( administrator = True )
 
 async def ban( ctx, member: discord.Member, *, reason = None ):
+    emb = discord.Embed(title='Готово!', colour=discord.Color.dark_red())
+
+    emb.add_field(name='{} успешно забанен!'.format(member.display_name), value='Справедливо...')
+
     await ctx.channel.purge( limit = 1 )
     await member.ban( reason = reason )
-    await ctx.send( f'{member.mention} успешно забанен!' )
+    await ctx.send( embed = emb )
 
 @client.command( pass_context = True )
 @commands.has_permissions( administrator = True )
 
 async def pardon( ctx, *, member ):
+    emb = discord.Embed(title='Готово!', colour=discord.Color.green())
     await ctx.channel.purge( limit = 1 )
+
+    emb.add_field(name='Пользователь успешно разбанен!', value='Справедливо...')
 
     banned_users = await ctx.guild.bans()
 
@@ -46,19 +57,32 @@ async def pardon( ctx, *, member ):
         user = ban_entry.user
 
         await ctx.guild.unban( user )
-        await ctx.send(f'{user.mention} успешно разбанен!')
+        await ctx.send( embed = emb )
         return
 
 @client.command( pass_context = True )
 
 async def help( ctx ):
-    emb = discord.Embed( title = 'Список команд' )
+    emb = discord.Embed( title = 'Список команд', colour = discord.Color.purple() )
 
+    emb.set_author( name = client.user.name, icon_url = client.user.avatar_url )
     emb.add_field( name = '{}clear'.format(PREFIX), value = 'Отчистка чата\n' )
-    emb.add_field(name='{}kick'.format(PREFIX), value='Кик с сервера\n')
-    emb.add_field(name='{}ban'.format(PREFIX), value='Бан\n')
-    emb.add_field(name='{}pardon'.format(PREFIX), value='Разбан')
+    emb.add_field( name='{}kick'.format(PREFIX), value='Кик с сервера\n')
+    emb.add_field( name='{}ban'.format(PREFIX), value='Бан\n')
+    emb.add_field( name='{}pardon'.format(PREFIX), value='Разбан')
 
+    await ctx.send( embed = emb )
+
+@client.command( pass_context = True )
+@commands.has_permissions( administrator = True )
+
+async def mute( ctx, member: discord.Member ):
+    emb = discord.Embed(title='Готово!', colour=discord.Color.dark_gray())
+    mute_role = discord.utils.get( ctx.message.guild.roles, name = 'mute' )
+
+    emb.add_field( name = '{} успешно замючен!'.format(member.display_name), value = 'Справедливо...' )
+
+    await member.add_roles( mute_role )
     await ctx.send( embed = emb )
 
 
